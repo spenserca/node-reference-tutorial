@@ -1,0 +1,16 @@
+{
+    "name": "reference-tutorial",
+    "version": "1.0.0",
+    "description": "Node reference blog application",
+    "main": "server.js",
+    "scripts": {
+        "test": "jasmine"
+    },
+    "author": "Spenser Andreassen",
+    "license": "ISC",
+    "devDependencies": {
+        "jasmine": "^3.1.0",
+        "koa": "^2.5.1",
+        "koa-bodyparser": "^4.2.1"
+    }
+}
