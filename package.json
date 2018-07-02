@@ -4,6 +4,7 @@
     "description": "Node reference blog application",
     "main": "server.js",
     "scripts": {
+        "start": "node server.js",
         "test": "jasmine"
     },
     "author": "Spenser Andreassen",
