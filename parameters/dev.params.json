@@ -2,6 +2,6 @@
     "Parameters": {
         "Image": "RELEASE_IMAGE_URL",
         "VpcId": "vpc-6311360b",
-        "SubnetIds": "subnet-b8fab1d0,subnet-16a3236c,subnet-7fc92233"
+        "SubnetIds": "subnet-3291da5a,subnet-38bf5474,subnet-a6cc4cdc"
     }
 }
