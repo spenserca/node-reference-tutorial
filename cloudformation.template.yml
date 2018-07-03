@@ -153,8 +153,10 @@ Parameters:
         - Type: forward
           TargetGroupArn: !Ref TargetGroup
         LoadBalancerArn: !Ref LoadBalancer
-        Port: 80
-        Protocol: HTTP
+        Port: 443
+        Protocol: HTTPS
+        Certificates:
+        - CertificateArn: !Ref Certificate
     TargetGroup:
       Type: AWS::ElasticLoadBalancingV2::TargetGroup
       DependsOn: 
@@ -181,6 +183,13 @@ Parameters:
         AliasTarget:
           HostedZoneId: !GetAtt "LoadBalancer.CanonicalHostedZoneID"
           DNSName: !GetAtt "LoadBalancer.DNSName"
+    Certificate:
+      Type: AWS::CertificateManager::Certificate
+      Properties:
+        DomainName: !Sub "${Subdomain}.${BaseDomain}"
+        DomainValidationOptions:
+          - DomainName: !Sub "${Subdomain}.${BaseDomain}"
+            ValidationDomain: !Ref BaseDomain
 Outputs:
   LoadBalancerDNS:
     Value: !GetAtt LoadBalancer.DNSName
