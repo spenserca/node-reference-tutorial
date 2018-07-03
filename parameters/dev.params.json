@@ -2,8 +2,6 @@
     "Parameters": {
         "Image": "RELEASE_IMAGE_URL",
         "VpcId": "vpc-2e82a546",
-        "SubnetIds": "subnet-b8fab1d0,subnet-16a3236c,subnet-7fc92233",
-        "Subdomain": "products",
-        "BaseDomain": "example.com"
+        "SubnetIds": "subnet-b8fab1d0,subnet-16a3236c,subnet-7fc92233"
     }
 }
