@@ -92,10 +92,10 @@ Resources:
       TaskDefinition: !Ref TaskDefinition
   #    We haven't setup a load balancer yet so this part is commented out. 
   #    The Service references the loadbalancer rather than the other way around
-  #    LoadBalancers: 
-  #      - ContainerName: ProductService
-  #        ContainerPort: 3000
-  #        TargetGroupArn: !Ref TargetGroup
+      LoadBalancers: 
+        - ContainerName: ProductService
+          ContainerPort: 3000
+          TargetGroupArn: !Ref TargetGroup
       NetworkConfiguration: 
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
