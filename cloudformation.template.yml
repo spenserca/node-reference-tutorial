@@ -100,7 +100,7 @@ Resources:
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
           Subnets: !Ref SubnetIds
-         SecurityGroups:
+          SecurityGroups:
            - !Ref AppSG
       # This is optional (These are the default values)
       DeploymentConfiguration:
