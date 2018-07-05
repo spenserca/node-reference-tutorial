@@ -146,6 +146,6 @@ Resources:
               #Create or update the stack, but don't delete it if it fails
               ActionMode: CREATE_UPDATE 
               TemplatePath: buildResults::cloudformation.template.yml
-              TemplateConfiguration: buildResults::dev.params.json
+              TemplateConfiguration: buildResults::prod.params.json
               RoleArn: !GetAtt PipelineRole.Arn
               Capabilities: CAPABILITY_IAM
