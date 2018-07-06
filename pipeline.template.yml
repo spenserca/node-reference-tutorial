@@ -5,6 +5,11 @@ Parameters:
     Type: String
     NoEcho: true
     Description: OAuth Token for the github repository
+  PipelineAdminArn:
+    Type: String
+    Description: |
+      ARN of a user or role that can administrate this pipeline.
+      This can be obtained by running 'aws sts get-caller-identity --query='Arn' --output=text'
 Resources:
   ArtifactStorage:
     Type: "AWS::S3::Bucket"
@@ -176,5 +181,46 @@ Resources:
         EnvironmentVariables:
           - Name: BASE_URL
             Value: "http://Produ-LoadB-QPGE6YFMFZOT-225149505.us-east-2.elb.amazonaws.com/"
+          - Name: CLIENT_ID
+            Value: "48svd1u83hs3371s44em35fli"
+          - Name: ENCRYPTED_CLIENT_SECRET
+            Value: "AQICAHhBYFqAIGLrKIiTIB6ji/SKxxg1y9iS+2faCPTfvEs26wHUH8n5kfTZsWsa4A9Np27hAAAAlTCBkgYJKoZIhvcNAQcGoIGEMIGBAgEAMHwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM7IVD+f7mIrsBApPmAgEQgE+d68keWi7bQOyr4SmUERGplGAtzzzSjP6WhNSEAZ9slF+CO/BGPY7lKItOh7VbCfXClwzPErtocv2J9Z0RK/JRDuGDXA0qirHsqsbbi6h2"
+          - Name: TOKEN_ENDPOINT
+            Value: "https://Produ-LoadB-QPGE6YFMFZOT-225149505.us-east-2.elb.amazonaws.com.auth.us-east-2.amazoncognito.com/oauth2/token"
       Artifacts:
         Type: CODEPIPELINE
+  PipelineKey:
+    Type: "AWS::KMS::Key"
+    Properties:
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement: 
+          - Sid: "Allow administration of the key"
+            Effect: "Allow"
+            Principal: 
+              AWS: !Ref PipelineAdminArn
+            Action: 
+              - "kms:*"
+            Resource: "*"
+          - Sid: "Allow use of the key"
+            Effect: "Allow"
+            Principal: 
+              AWS: !GetAtt PipelineRole.Arn
+            Action: 
+              - "kms:Decrypt"
+            Resource: "*"
+          - Sid: "Allow Encryption by everyone in the account"
+            Effect: "Allow"
+            Principal: 
+              AWS: "*"
+            Action: 
+              - "kms:Encrypt"
+            Resource: "*"
+            Condition:
+              StringEquals:
+                "kms:CallerAccount": !Ref "AWS::AccountId"
+  PipelineKeyAlias:
+    Type: "AWS::KMS::Alias"
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-key"
+      TargetKeyId: !Ref PipelineKey
