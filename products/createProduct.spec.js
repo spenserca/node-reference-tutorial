@@ -24,6 +24,9 @@ describe('products', function() {
             });
             spyOn(this.documentClient, 'put').and.callThrough();
 
+            this.validateProduct = (product) => undefined;
+            spyOn(this, 'validateProduct').and.callThrough();
+
             this.createProduct = proxyquire('./createProduct', {
                 'aws-sdk': {
                     DynamoDB: {
@@ -31,7 +34,8 @@ describe('products', function() {
                             return documentClient;
                         }
                     }
-                }
+                },
+                './validateProduct': this.validateProduct
             });
         });
 
@@ -53,6 +57,25 @@ describe('products', function() {
         it('should populate an id on the product', async function() {
             await this.createProduct(this.context);
             expect(this.documentClient.put.calls.argsFor(0)[0].Item.id).toBeDefined();
+        });
+
+        it('should return validation errors as the body if validation fails', async function() {
+            let errors = {name: []};
+            this.validateProduct.and.returnValue(errors);
+            await this.createProduct(this.context);
+            expect(this.context.body).toBe(errors);
+        });
+
+        it('should set status to 400 if validation fails', async function() {
+            this.validateProduct.and.returnValue({name: []});
+            await this.createProduct(this.context);
+            expect(this.context.status).toEqual(400);
+        });
+
+        it('should not save the product if validation fails', async function() {
+            this.validateProduct.and.returnValue({name: []});
+            await this.createProduct(this.context);
+            expect(this.documentClient.put).not.toHaveBeenCalled();
         });
     });
 });
