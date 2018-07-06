@@ -2,7 +2,7 @@ const shortid = require('shortid');
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-2'});
 const documentClient = new AWS.DynamoDB.DocumentClient();
-const productsTableName = process.env.PRODUCTS_TABLE_NAME || 'ProductService-DEV-ProductsTable-IO7U2ICRS693';
+const productsTableName = process.env.PRODUCTS_TABLE_NAME;
 const validateProduct = require('./validateProduct');
 
 module.exports = async function createProduct(ctx) {

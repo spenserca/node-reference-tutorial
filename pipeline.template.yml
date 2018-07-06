@@ -129,6 +129,17 @@ Resources:
               TemplateConfiguration: buildResults::dev.params.json
               RoleArn: !GetAtt PipelineRole.Arn
               Capabilities: CAPABILITY_IAM
+          - Name: IntegrationTest
+            RunOrder: 2
+            ActionTypeId:
+              Category: Test
+              Owner: AWS
+              Provider: CodeBuild
+              Version: 1
+            InputArtifacts:
+              - Name: buildResults
+            Configuration:
+              ProjectName: !Ref IntegrationTest
           #This is the same as the stage above except the StackName, ActionMode and TemplateConfiguration are different
         - Name: Deploy_PROD
           Actions:
@@ -149,3 +160,21 @@ Resources:
               TemplateConfiguration: buildResults::prod.params.json
               RoleArn: !GetAtt PipelineRole.Arn
               Capabilities: CAPABILITY_IAM
+  IntegrationTest:
+    Type: AWS::CodeBuild::Project
+    DependsOn:
+      - PipelineRole
+    Properties:
+      ServiceRole: !GetAtt PipelineRole.Arn
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: integration.buildspec.yml
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/docker:17.09.0
+        EnvironmentVariables:
+          - Name: BASE_URL
+            Value: "http://Produ-LoadB-QPGE6YFMFZOT-225149505.us-east-2.elb.amazonaws.com/"
+      Artifacts:
+        Type: CODEPIPELINE

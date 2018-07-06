@@ -19,11 +19,10 @@ function buildRouter() {
 }
 
 function createAuthMiddleware() {
-    let userPoolId = process.env.USER_POOL_ID || 'us-east-2_Vy7cnPhVi';
     return jwt({
         secret: jwksRsa.koaJwtSecret({
             cache: true,
-            jwksUri: `https://cognito-idp.us-east-2.amazonaws.com/${userPoolId}/.well-known/jwks.json`
+            jwksUri: `https://cognito-idp.us-east-2.amazonaws.com/${process.env.USER_POOL_ID}/.well-known/jwks.json`
         }),
         algorithms: ['RS256']
     });
