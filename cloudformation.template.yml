@@ -218,5 +218,3 @@ Outputs:
     Value: !GetAtt LoadBalancer.DNSName
   ProductsTable:
     Value: !Ref ProductsTable
-    # Export:
-    #   Name: "ProductsTable::Id"
